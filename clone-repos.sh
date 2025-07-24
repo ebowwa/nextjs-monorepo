@@ -2,9 +2,7 @@
 
 # Array of repositories to clone
 repos=(
-  "unautomated"
   "goldson"
-  "printondemand"
   "acceleration-blog"
   "next-client-yolo"
   "alchemist"

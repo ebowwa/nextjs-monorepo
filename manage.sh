@@ -8,9 +8,7 @@ case "$1" in
     echo "The following repos will be deleted:"
     echo
     cat <<EOF
-- unautomated
 - goldson
-- printondemand
 - acceleration-blog
 - next-client-yolo
 - alchemist
@@ -26,7 +24,7 @@ EOF
     read -p "Are you ABSOLUTELY sure? Type 'DELETE' to confirm: " confirmation
     
     if [ "$confirmation" = "DELETE" ]; then
-      for repo in unautomated goldson printondemand acceleration-blog next-client-yolo alchemist solana_next_example resmp.dev edesia-next giannacollectables https-x-workers-bots.vercel.app dockerized-nextjs app-router-pmndrs-tunnel-example; do
+      for repo in goldson acceleration-blog next-client-yolo alchemist solana_next_example resmp.dev edesia-next giannacollectables https-x-workers-bots.vercel.app dockerized-nextjs app-router-pmndrs-tunnel-example; do
         echo "Deleting $repo..."
         gh repo delete "ebowwa/$repo" --yes
       done

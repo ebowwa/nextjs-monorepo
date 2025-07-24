@@ -22,11 +22,6 @@ nextjs-monorepo/
 └── config/                # Shared configuration
 ```
 
-## Non-Next.js Projects
-
-The following repositories were not Next.js projects and were excluded:
-- `printondemand` - Python project
-- `unautomated` - Multi-service project (has backend/clients structure)
 
 ## Getting Started
 
