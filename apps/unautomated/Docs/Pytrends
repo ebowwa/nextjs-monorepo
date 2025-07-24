@@ -1,0 +1,348 @@
+# PyTrends
+
+## Introduction
+
+**PyTrends** is an unofficial API for [Google Trends](https://trends.google.com/). It provides a simple interface for automating the download of reports from Google Trends. However, it is dependent on Google's backend, which means it may break if Google changes their systems. Contributions are welcome to keep the library up-to-date!
+
+**Looking for maintainers!** If you're interested in helping maintain PyTrends, please open an issue with your contact information.
+
+## Table of Contents
+
+- [Installation](#installation)
+  - [Requirements](#requirements)
+- [API](#api)
+  - [Connect to Google](#connect-to-google)
+  - [Build Payload](#build-payload)
+- [API Methods](#api-methods)
+  - [Interest Over Time](#interest-over-time)
+  - [Multirange Interest Over Time](#multirange-interest-over-time)
+  - [Historical Hourly Interest](#historical-hourly-interest)
+  - [Interest by Region](#interest-by-region)
+  - [Related Topics](#related-topics)
+  - [Related Queries](#related-queries)
+  - [Trending Searches](#trending-searches)
+  - [Realtime Search Trends](#realtime-search-trends)
+  - [Top Charts](#top-charts)
+  - [Suggestions](#suggestions)
+- [Common API Parameters](#common-api-parameters)
+- [Caveats](#caveats)
+- [Credits](#credits)
+
+## Installation
+
+### Using pip
+
+```bash
+pip install pytrends
+```
+
+### Requirements
+
+- **Python Version:** 3.3+
+- **Dependencies:**
+  - [Requests](https://pypi.org/project/requests/)
+  - [lxml](https://pypi.org/project/lxml/)
+  - [Pandas](https://pandas.pydata.org/)
+
+## API
+
+### Connect to Google
+
+To start using PyTrends, you need to establish a connection to Google Trends.
+
+```python
+from pytrends.request import TrendReq
+
+# Basic connection
+pytrends = TrendReq(hl='en-US', tz=360)
+```
+
+#### Using Proxies
+
+If you encounter rate limits or blocks from Google, you can use proxies:
+
+```python
+from pytrends.request import TrendReq
+
+pytrends = TrendReq(
+    hl='en-US',
+    tz=360,
+    timeout=(10, 25),
+    proxies=['https://34.203.233.13:80'],
+    retries=2,
+    backoff_factor=0.1,
+    requests_args={'verify': False}
+)
+```
+
+**Parameters:**
+
+- `hl` (str): Host language (e.g., `'en-US'`).
+- `tz` (int): Timezone offset in minutes (e.g., `360` for US CST).
+- `timeout` (tuple): Connect and read timeout.
+- `proxies` (list): List of HTTPS proxies.
+- `retries` (int): Number of retries.
+- `backoff_factor` (float): Backoff factor for retries.
+- `requests_args` (dict): Additional arguments for the `requests` library.
+
+**Notes:**
+
+- `hl` specifies the host language for accessing Google Trends.
+- Only HTTPS proxies are supported, and the port number must be included.
+
+### Build Payload
+
+After establishing a connection, you need to build a payload with your desired keywords and parameters.
+
+```python
+kw_list = ["Blockchain"]
+pytrends.build_payload(kw_list, cat=0, timeframe='today 5-y', geo='', gprop='')
+```
+
+**Parameters:**
+
+- `kw_list` (list): **Required.** List of keywords to retrieve data for.
+- `cat` (int): Category to narrow results. Defaults to `0` (no category).
+- `timeframe` (str): Time range for the data (e.g., `'today 5-y'`).
+- `geo` (str): Geographic region (e.g., `'US'` for United States).
+- `gprop` (str): Google property to filter (e.g., `'images'`, `'news'`, `'youtube'`, `'froogle'`).
+
+## API Methods
+
+### Interest Over Time
+
+Retrieve historical, indexed data showing when a keyword was most searched.
+
+```python
+df = pytrends.interest_over_time()
+print(df.head())
+```
+
+**Returns:** `pandas.DataFrame`
+
+### Multirange Interest Over Time
+
+Retrieve historical, indexed data across multiple time ranges.
+
+```python
+pytrends.build_payload(
+    kw_list=['pizza', 'bagel'],
+    timeframe=['2022-09-04 2022-09-10', '2022-09-18 2022-09-24']
+)
+df = pytrends.multirange_interest_over_time()
+print(df.head())
+```
+
+**Returns:** `pandas.DataFrame` (includes the average in the first row)
+
+### Historical Hourly Interest
+
+Retrieve historical, indexed hourly data.
+
+```python
+df = pytrends.get_historical_interest(
+    kw_list=["pizza"],
+    year_start=2022, month_start=1, day_start=1, hour_start=0,
+    year_end=2022, month_end=1, day_end=2, hour_end=0,
+    cat=0, geo='', gprop='', sleep=60
+)
+print(df.head())
+```
+
+**Parameters:**
+
+- `kw_list` (list): **Required.** List of keywords.
+- `year_start`, `month_start`, `day_start`, `hour_start` (int): Start datetime.
+- `year_end`, `month_end`, `day_end`, `hour_end` (int): End datetime.
+- `cat` (int): Category.
+- `geo` (str): Geographic region.
+- `gprop` (str): Google property.
+- `sleep` (int): Seconds to sleep between API calls to handle rate limits.
+
+**Returns:** `pandas.DataFrame`
+
+### Interest by Region
+
+Retrieve data on where a keyword is most searched.
+
+```python
+df = pytrends.interest_by_region(resolution='COUNTRY', inc_low_vol=True, inc_geo_code=False)
+print(df.head())
+```
+
+**Parameters:**
+
+- `resolution` (str): `'CITY'`, `'COUNTRY'`, `'DMA'`, or `'REGION'`.
+- `inc_low_vol` (bool): Include low volume regions.
+- `inc_geo_code` (bool): Include ISO codes of regions.
+
+**Returns:** `pandas.DataFrame`
+
+### Related Topics
+
+Retrieve related topics for a given keyword.
+
+```python
+related_topics = pytrends.related_topics()
+print(related_topics)
+```
+
+**Returns:** `dict` of `pandas.DataFrame`
+
+### Related Queries
+
+Retrieve related queries for a given keyword.
+
+```python
+related_queries = pytrends.related_queries()
+print(related_queries)
+```
+
+**Returns:** `dict` of `pandas.DataFrame`
+
+### Trending Searches
+
+Retrieve the latest trending searches.
+
+```python
+df_us = pytrends.trending_searches(pn='united_states')
+print(df_us.head())
+
+df_japan = pytrends.trending_searches(pn='japan')
+print(df_japan.head())
+```
+
+**Parameters:**
+
+- `pn` (str): Country name (e.g., `'united_states'`, `'japan'`).
+
+**Returns:** `pandas.DataFrame`
+
+### Realtime Search Trends
+
+Retrieve real-time search trends.
+
+```python
+df_us = pytrends.realtime_trending_searches(pn='US')
+print(df_us.head())
+
+df_india = pytrends.realtime_trending_searches(pn='IN')
+print(df_india.head())
+```
+
+**Parameters:**
+
+- `pn` (str): Country code (e.g., `'US'`, `'IN'`).
+
+**Returns:** `pandas.DataFrame`
+
+### Top Charts
+
+Retrieve top charts data for a specific year.
+
+```python
+df = pytrends.top_charts(2019, hl='en-US', tz=300, geo='GLOBAL')
+print(df.head())
+```
+
+**Parameters:**
+
+- `date` (int): Year (e.g., `2019`). **Required.**
+- `hl` (str): Host language.
+- `tz` (int): Timezone offset in minutes.
+- `geo` (str): Geographic region (e.g., `'GLOBAL'`).
+
+**Returns:** `pandas.DataFrame`
+
+**Notes:**
+
+- Google removed support for monthly queries (e.g., `'YYYY-MM'`).
+- Data for the current year is not available.
+
+### Suggestions
+
+Retrieve keyword suggestions to refine a trend search.
+
+```python
+suggestions = pytrends.suggestions(keyword='iron')
+print(suggestions)
+```
+
+**Parameters:**
+
+- `keyword` (str): **Required.** Keyword to get suggestions for.
+
+**Returns:** `dict`
+
+### Categories
+
+Retrieve available categories for narrowing search results.
+
+```python
+categories = pytrends.categories()
+print(categories)
+```
+
+**Returns:** `dict`
+
+## Common API Parameters
+
+Many API methods utilize the following parameters:
+
+### `kw_list`
+
+- **Description:** List of keywords to retrieve data for.
+- **Example:** `['Pizza']` or `['Pizza', 'Italian', 'Spaghetti', 'Breadsticks', 'Sausage']`
+- **Advanced Keywords:** Use `pytrends.get_suggestions()` to find encoded topics for more specific searches.
+
+### `cat`
+
+- **Description:** Category to narrow results.
+- **Example:** `'71'` for the category found in the URL `https://www.google.com/trends/explore#q=pizza&cat=71`.
+- **Default:** `0` (no category)
+
+### `geo`
+
+- **Description:** Geographic region.
+- **Examples:**
+  - `'US'` for United States
+  - `'US-AL'` for Alabama
+  - `'GB-ENG'` for England
+- **Default:** World
+- **Note:** Can specify up to five regions.
+
+### `tz`
+
+- **Description:** Timezone offset in minutes.
+- **Example:** `360` for US CST
+- **Note:** Google uses positive offsets (e.g., `360` not `-360`).
+
+### `timeframe`
+
+- **Description:** Time range for data.
+- **Examples:**
+  - `'today 5-y'` for the last five years
+  - `'2016-12-14 2017-01-25'` for specific dates
+  - `'now 7-d'` for the last seven days
+- **Notes:**
+  - Supports monthly, daily, and hourly formats.
+  - Time component is based on UTC.
+
+### `gprop`
+
+- **Description:** Google property to filter.
+- **Examples:** `'images'`, `'news'`, `'youtube'`, `'froogle'`
+- **Default:** Web searches
+
+## Caveats
+
+- **Unofficial API:** PyTrends is not an official or supported API by Google.
+- **Backend Changes:** Google may change aggregation levels for items with very large or very small search volumes.
+- **Rate Limits:** The exact rate limit is not publicly known. Reports suggest that approximately 1,400 sequential requests with a 4-hour timeframe may hit the limit. Implementing a sleep interval of 60 seconds between requests is recommended after reaching the limit.
+- **SSL Issues:** For certain configurations, the `certifi` library may require the `REQUESTS_CA_BUNDLE` environment variable to be set to the path of the CA certificates. Otherwise, you may encounter SSL errors like `SSLError: [SSL: CERTIFICATE_VERIFY_FAILED]`.
+
+## Credits
+
+PyTrends is maintained by a community of contributors. Special thanks to all who contribute to its development and maintenance. If you encounter issues or have suggestions, please [open an issue](https://github.com/GeneralMills/pytrends/issues) on the GitHub repository.
+
+---
