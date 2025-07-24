@@ -1,0 +1,20 @@
+{
+    "keyFeaturesText": "Key Features",
+    "title": "Elevate Your Twitter Presence",
+    "description": "Our robot service agency offers a suite of powerful tools to help you dominate the Twitter landscape.",
+    "features": [
+      {
+        "title": "Automated Engagement",
+        "description": "Our AI-powered bots will automatically like, comment, and retweet on your behalf, helping you build a stronger presence."
+      },
+      {
+        "title": "Targeted Campaigns",
+        "description": "Leverage our data-driven strategies to launch hyper-targeted campaigns and reach your ideal audience."
+      },
+      {
+        "title": "Analytics and Reporting",
+        "description": "Monitor your Twitter performance with our comprehensive analytics and reporting tools."
+      }
+    ],
+    "imageUrl": "/image-assets/landing/x-twitter-services-bird-x.png"
+  }

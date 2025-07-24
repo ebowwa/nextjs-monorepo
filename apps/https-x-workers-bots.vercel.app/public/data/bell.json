@@ -1,0 +1,23 @@
+[
+  {
+    "id": "Low",
+    "data": [
+      { "x": "Low", "y": 43 },
+      { "x": "Medium", "y": 137 }
+    ]
+  },
+  {
+    "id": "Middle Ground",
+    "data": [
+      { "x": "Low", "y": 137 },
+      { "x": "Medium", "y": 96 }
+    ]
+  },
+  {
+    "id": "Most Common",
+    "data": [
+      { "x": "Low", "y": 154 },
+      { "x": "Medium", "y": 204 }
+    ]
+  }
+]

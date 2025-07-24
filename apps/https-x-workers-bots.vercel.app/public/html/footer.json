@@ -1,0 +1,27 @@
+{
+    "copyright": "© 2023 X Workers Agency. All rights reserved.",
+    "links": [
+      {
+        "label": "Home",
+        "url": "/"
+      },
+      {
+        "label": "Agents",
+        "url": "/agents"
+      },
+      {
+        "label": "Privacy",
+        "url": "/contact"
+      },
+    {
+        "label": "Share Us",
+          "url": "/share-us"
+    }
+    ],
+    "socialMedia": [
+      {
+        "platform": "Twitter",
+        "url": "https://twitter.com/your-twitter-handle"
+      }
+    ]
+  }

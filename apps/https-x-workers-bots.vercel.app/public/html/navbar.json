@@ -1,0 +1,24 @@
+{
+    "logo": {
+      "iconUrl": "/icons/bot-icon.svg",
+      "altText": "Robot Twitter Agency"
+    },
+    "links": [
+      {
+        "label": "𝕏",
+        "href": "/twitter"
+      },
+      {
+        "label": "Agents",
+        "href": "/agents"
+      },
+      {
+        "label": "Privacy",
+        "href": "#"
+      },
+      {
+        "label": "Share Us",
+        "href": "/share-us"
+      }
+    ]
+  }
