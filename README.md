@@ -1,6 +1,6 @@
 # Next.js Monorepo
 
-This monorepo consolidates multiple Next.js projects into a single repository for easier management.
+This monorepo consolidates 15 Next.js projects into a single repository for easier management.
 
 ## Structure
 
@@ -17,7 +17,11 @@ nextjs-monorepo/
 │   ├── https-x-workers-bots/  # Next.js with workers
 │   ├── next-client-yolo/      # Next.js client
 │   ├── resmp.dev/             # Next.js portfolio
-│   └── solana-site/           # Solana Next.js example (from solana_next_example/site)
+│   ├── solana-site/           # Solana Next.js example
+│   ├── threejs-nextjs/        # Three.js integration (nueralink)
+│   ├── r3f-example/           # React Three Fiber example
+│   ├── synth-next/            # Next.js with FastAPI
+│   └── blog-starter/          # Blog starter template
 ├── packages/               # Shared packages
 └── config/                # Shared configuration
 ```
