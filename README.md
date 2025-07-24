@@ -1,6 +1,6 @@
 # Next.js Monorepo
 
-This monorepo consolidates 16 Next.js projects into a single repository for easier management.
+This monorepo consolidates 18 Next.js projects into a single repository for easier management.
 
 ## Structure
 
@@ -22,7 +22,9 @@ nextjs-monorepo/
 │   ├── r3f-example/           # React Three Fiber example
 │   ├── synth-next/            # Next.js with FastAPI
 │   ├── blog-starter/          # Blog starter template
-│   └── next-printondemand-site/  # Print on demand site
+│   ├── next-printondemand-site/  # Print on demand site
+│   ├── PoeHackathon/          # Poe hackathon project
+│   └── ascii-llama/           # ASCII art llama with Three.js
 ├── packages/               # Shared packages
 └── config/                # Shared configuration
 ```
